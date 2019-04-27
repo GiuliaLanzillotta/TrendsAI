@@ -117,7 +117,6 @@ class Reader:
 
 
 def trends_data_builder(woeid=721943):
-    # TODO write the data in json
     """
     This function reads the trends data using a
     Reader objects and stores them in the Data folder.
