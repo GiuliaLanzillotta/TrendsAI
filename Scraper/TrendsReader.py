@@ -117,9 +117,22 @@ class Reader:
 
 
 def trends_data_builder(woeid=721943):
+    # TODO write the data in json
     """
     This function reads the trends data using a
     Reader objects and stores them in the Data folder.
+    The data is stored in this json format:
+    {
+        "trend_name_1": [ list of tweets ],
+        "trend_name_2": [ list of tweets ],
+        ...
+    }
+    To read it simply do :
+    >>>with open(file_to_open, 'r') as json_file:
+    >>>     data = json.load(json_file)
+    >>>     for trend in data.keys():
+    >>>         tweets = data['trend']
+
     The default place is Rome.
     """
     #
@@ -132,17 +145,18 @@ def trends_data_builder(woeid=721943):
         print("")
         trends = reader.get_trends(woeid=woeid)
 
+        # To write json to a file we organize data in
+        # a dictionary.
+        json_dict = {}
+        for trend in trends:
+            trend_name = trend['name']
+            print("Reading tweets for trend ", trend_name)
+            print("")
+            trend_tweets = reader.get_tweets(trend_name=trend_name)
+            json_dict[trend_name] = trend_tweets
+        # Writing the dict to file in json format
         with open(data_file, 'w') as f:
-            for trend in trends:
-                trend_name = trend['name']
-                print("Reading tweets for trend ", trend_name)
-                print("")
-                trend_tweets = reader.get_tweets(trend_name=trend_name)
-
-                # write to file all the trend tweets
-                f.write("TREND : %s\n" % trend_name)
-                for tweet in trend_tweets:
-                    f.write("%s\n" % tweet)
+            json.dump(json_dict, f)
 
         print("Finished reading trends for woeid ", woeid)
 
