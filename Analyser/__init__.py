@@ -3,6 +3,7 @@
 #
 import os
 data_folder = os.path.join(os.path.dirname(__file__), '../Data/')
+result_folder = os.path.join(os.path.dirname(__file__), '../Results/')
 credentials_file = os.path.join(os.path.dirname(__file__), 'TrendsAI-916500c63c69.json')
 # in order to use Google APIs we need to set an environment variable
 print("Setup for Google APIs sdk...")

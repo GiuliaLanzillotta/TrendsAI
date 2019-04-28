@@ -11,7 +11,7 @@ class Loader:
     # Default region is Rome.
     def __init__(self, woeid=721943) -> None:
         super().__init__()
-        self.data_file = os.path.join(data_folder, 'trends_data_{}.txt'.format(woeid))
+        self.data_file = os.path.join(data_folder, 'trends_data_{}.json'.format(woeid))
 
     def load_all_in_one(self):
         """
@@ -31,6 +31,19 @@ class Loader:
         print("...done preprocessing.")
         print("")
         return flattened_tweets
+
+    def load_dict(self):
+        """
+        This function will load all the tweets
+        in a dictionary organized by trends.
+        """
+        print("")
+        print("Start preprocessing all in one...")
+        with open(self.data_file, 'r') as json_file:
+            data = json.load(json_file)
+        print("...done preprocessing.")
+        print("")
+        return data
 
 
 class Cleaner:
@@ -98,9 +111,10 @@ def clean_data(tweets):
     return cleaned_data
 
 
-def prepare_data(woeid=None):
+def prepare_data_all_in_one(woeid=None):
     """
-    This function does all the preprocessing steps:
+    This function does all the preprocessing steps,
+    loading all the tweets data in one list:
         1. Load data with a Loader object
         2. Clean data calling the @clean_data function
     If a woeid is not given it will use the deault
@@ -114,3 +128,25 @@ def prepare_data(woeid=None):
     cleaned_data = clean_data(text_data)
     return cleaned_data
 
+
+def prepare_data_by_trends(woeid=None):
+    """
+        This function does all the preprocessing steps,
+        loading all the tweets data in a dictionary,
+        organised by trends:
+            1. Load data with a Loader object
+            2. Clean data calling the @clean_data function
+        If a woeid is not given it will use the deault
+        woeid of the Loader object (see Loader class).
+        """
+    if woeid:
+        loader = Loader(woeid)
+    else:
+        loader = Loader()
+    text_data = loader.load_dict()
+
+    cleaned_data = {}
+    for trend in text_data.keys():
+        cleaned_data[trend] = clean_data(text_data[trend])
+
+    return cleaned_data

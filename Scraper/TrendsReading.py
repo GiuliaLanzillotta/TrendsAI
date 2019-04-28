@@ -136,7 +136,7 @@ def trends_data_builder(woeid=721943):
     """
     #
     # The data read will be written in this file
-    data_file = os.path.join(data_folder, 'trends_data_{}.txt'.format(woeid))
+    data_file = os.path.join(data_folder, 'trends_data_{}.json'.format(woeid))
 
     reader = Reader()
     try:
